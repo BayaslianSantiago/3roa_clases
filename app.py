@@ -1,64 +1,74 @@
 import streamlit as st
 
-# Configuración de página para usar todo el ancho de la pantalla
+# Configuración de página para ocultar elementos nativos y usar todo el ancho
 st.set_page_config(page_title="Repaso General", layout="wide")
 
-# Estilo personalizado para agrandar fuentes y simular una presentación
+# CSS para ocultar el menú de Streamlit, centrar títulos y hacer fuentes grandes
 st.markdown("""
     <style>
-    .big-font {
-        font-size: 50px !important;
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    .title-text {
+        font-size: 60px !important;
         font-weight: bold;
-        color: #1E88E5;
+        color: #2E86C1;
+        text-align: center;
+        margin-bottom: 20px;
     }
-    .medium-font {
+    .subtitle-text {
+        font-size: 35px !important;
+        text-align: center;
+        color: #555555;
+        margin-bottom: 40px;
+    }
+    .content-text {
         font-size: 30px !important;
         margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Menú lateral para navegar como si fueran diapositivas
-st.sidebar.title("Navegación")
-diapositiva = st.sidebar.radio("Ir a:", [
-    "1. Inicio", 
-    "2. Python: Tipos de Datos", 
-    "3. Python: Variables", 
-    "4. Web: HTML5", 
-    "5. Web: CSS"
-])
+# Lógica de navegación simulando diapositivas
+if 'slide' not in st.session_state:
+    st.session_state.slide = 0
 
-# --- DIAPOSITIVA 1 ---
-if diapositiva == "1. Inicio":
-    st.markdown('<p class="big-font">Desarrollo Web e Integración de Sistemas</p>', unsafe_allow_html=True)
-    st.markdown("---")
-    st.markdown('<p class="medium-font">Repaso General: Python, HTML5 y CSS</p>', unsafe_allow_html=True)
+def next_slide():
+    if st.session_state.slide < 4:
+        st.session_state.slide += 1
 
-# --- DIAPOSITIVA 2 ---
-elif diapositiva == "2. Python: Tipos de Datos":
-    st.markdown('<p class="big-font">Python: ¿Qué es type?</p>', unsafe_allow_html=True)
-    st.markdown("---")
-    st.markdown('<p class="medium-font">En programación, cada dato tiene un "tipo[span_0](start_span)"[span_0](end_span).</p>', unsafe_allow_html=True)
+def prev_slide():
+    if st.session_state.slide > 0:
+        st.session_state.slide -= 1
+
+# --- DIAPOSITIVAS ---
+
+if st.session_state.slide == 0:
+    st.markdown('<p class="title-text">Desarrollo Web e Integración de Sistemas</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle-text">Repaso General para 3er Año</p>', unsafe_allow_html=True)
+
+elif st.session_state.slide == 1:
+    st.markdown('<p class="title-text">Tipos de Datos en Python</p>', unsafe_allow_html=True)
+    st.markdown('<p class="content-text">En programación, cada dato tiene un tipo específico que define cómo se comporta dentro del sistema.</p>', unsafe_allow_html=True)
     
     st.code('''
-# Números enteros
-type(10)      # int 
+# Enteros (int)
+type(10)      
     
-# Números con coma
-type(3.5)     # float 
+# Decimales (float)
+type(3.5)     
 
-# Texto
-type("Hola")  # str 
+# Texto (str)
+type("Hola")  
 
-# Verdadero o falso
-type(True)    # bool 
+# Booleanos (bool)
+type(True)    
     ''', language='python')
 
-# --- DIAPOSITIVA 3 ---
-elif diapositiva == "3. Python: Variables":
-    st.markdown('<p class="big-font">Python: Variables</p>', unsafe_allow_html=True)
-    st.markdown("---")
-    st.markdown('<p class="medium-font">Las usamos para guardar información.</p>', unsafe_allow_html=True)
+elif st.session_state.slide == 2:
+    st.markdown('<p class="title-text">Variables en Python</p>', unsafe_allow_html=True)
+    st.markdown('<p class="content-text">Son espacios donde guardamos nuestra información para poder usarla y modificarla después.</p>', unsafe_allow_html=True)
     
     st.code('''
 nombre = "Juan"
@@ -68,25 +78,21 @@ altura = 1.70
 print(nombre)
     ''', language='python')
 
-# --- DIAPOSITIVA 4 ---
-elif diapositiva == "4. Web: HTML5":
-    st.markdown('<p class="big-font">HTML5: El Esqueleto</p>', unsafe_allow_html=True)
-    st.markdown("---")
-    st.markdown('<p class="medium-font">Define la estructura de nuestra página web.</p>', unsafe_allow_html=True)
+elif st.session_state.slide == 3:
+    st.markdown('<p class="title-text">HTML5: El Esqueleto</p>', unsafe_allow_html=True)
+    st.markdown('<p class="content-text">Define la estructura y los elementos que componen nuestra página web.</p>', unsafe_allow_html=True)
     
     st.code('''
-<h1>Título de la página</h1>
+<h1>Título Principal</h1>
 
-<p>Esto es un párrafo normal.</p>
+<p>Esto es un párrafo de texto en la web.</p>
 
 <img src="foto.jpg">
     ''', language='html')
 
-# --- DIAPOSITIVA 5 ---
-elif diapositiva == "5. Web: CSS":
-    st.markdown('<p class="big-font">CSS: El Estilo</p>', unsafe_allow_html=True)
-    st.markdown("---")
-    st.markdown('<p class="medium-font">Se encarga de la estética y los colores.</p>', unsafe_allow_html=True)
+elif st.session_state.slide == 4:
+    st.markdown('<p class="title-text">CSS: La Estética</p>', unsafe_allow_html=True)
+    st.markdown('<p class="content-text">Se encarga de los colores, los tamaños y la distribución visual de los elementos.</p>', unsafe_allow_html=True)
     
     st.code('''
 h1 {
@@ -94,4 +100,16 @@ h1 {
     background-color: black;
 }
     ''', language='css')
-  
+
+# --- CONTROLES DE NAVEGACIÓN ---
+st.markdown("---")
+col1, col2, col3 = st.columns([1, 8, 1])
+
+with col1:
+    if st.session_state.slide > 0:
+        st.button("Anterior", on_click=prev_slide)
+        
+with col3:
+    if st.session_state.slide < 4:
+        st.button("Siguiente", on_click=next_slide)
+        
