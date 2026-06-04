@@ -3,9 +3,14 @@ import streamlit as st
 # Configuración de página para ocultar elementos nativos y usar todo el ancho
 st.set_page_config(page_title="Repaso General", layout="wide")
 
-# CSS para ocultar el menú de Streamlit, centrar títulos y hacer fuentes grandes
+# CSS para forzar el modo oscuro, ocultar menús y ajustar las fuentes
 st.markdown("""
     <style>
+    /* Forzar fondo oscuro para toda la app */
+    .stApp {
+        background-color: #121212;
+    }
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -13,19 +18,20 @@ st.markdown("""
     .title-text {
         font-size: 60px !important;
         font-weight: bold;
-        color: #2E86C1;
+        color: #5DADE2; /* Un azul más brillante para que resalte en el fondo oscuro */
         text-align: center;
         margin-bottom: 20px;
     }
     .subtitle-text {
         font-size: 35px !important;
         text-align: center;
-        color: #555555;
+        color: #B0B0B0; /* Gris claro para el subtítulo */
         margin-bottom: 40px;
     }
     .content-text {
         font-size: 30px !important;
         margin-bottom: 20px;
+        color: #EAEAEA; /* Blanco crudo/gris muy clarito para el texto general */
     }
     </style>
 """, unsafe_allow_html=True)
